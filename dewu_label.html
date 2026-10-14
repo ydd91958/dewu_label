@@ -16,12 +16,12 @@
   [contenteditable]:focus { outline: 1px dashed #4a8; }
 
   /* ===== 上半部分：面单 ===== */
-  .label { position:relative; width:100mm; height:125mm; background:var(--paper); padding:3mm 7mm 3mm 7mm; overflow:hidden; }
+  .label { position:relative; width:100mm; height:160mm; background:var(--paper); padding:3mm 7mm 3mm 7mm; overflow:hidden; }
   .side-no { position:absolute; font-family: "Courier New", monospace; font-size:2.6mm; letter-spacing:.2mm; writing-mode: vertical-rl; }
   .side-no.l1 { left:1.6mm; top:30mm; }
-  .side-no.l2 { left:1.6mm; top:78mm; }
+  .side-no.l2 { left:1.6mm; top:100mm; }
   .side-no.r1 { right:1.4mm; top:30mm; }
-  .side-no.r2 { right:1.4mm; top:78mm; }
+  .side-no.r2 { right:1.4mm; top:100mm; }
 
   .head { display:flex; justify-content:space-between; align-items:flex-start; height:17mm; }
   .brand { display:flex; align-items:center; gap:2mm; margin-top:2mm; }
@@ -34,10 +34,10 @@
   .meta .cnt { font-family:inherit; }
   .sort { font-size:10mm; font-weight:500; text-align:center; letter-spacing:.5mm; padding:1mm 0 1.5mm; border-bottom:.3mm solid var(--line); white-space:pre; }
 
-  .body { display:flex; height:calc(125mm - 3mm - 17mm - 5mm - 14.5mm - 3mm); }
+  .body { display:flex; height:calc(160mm - 3mm - 17mm - 5mm - 14.5mm - 3mm); }
   .main { flex:1; border-right:.3mm solid var(--line); display:flex; flex-direction:column; }
   .vbar { width:16mm; display:flex; align-items:center; justify-content:center; gap:.6mm; }
-  .vbar svg { width:10.5mm; height:62mm; }
+  .vbar svg { width:10.5mm; height:92mm; }
   .vbar .vno { writing-mode:vertical-rl; font-family:"Courier New",monospace; font-size:2.6mm; }
 
   .hbar { padding:1.5mm 2mm 1mm; text-align:center; border-bottom:.3mm solid var(--line); }
@@ -47,37 +47,37 @@
   .tags { display:flex; justify-content:flex-start; padding:1.2mm 2mm; }
   .tag { background:#111; color:#fff; font-size:3.4mm; padding:.6mm 1.4mm; border-radius:.5mm; margin-left:24mm; }
   .tag:first-child { margin-left:0; }
-  .dest { font-size:4mm; padding:0 2mm 1.2mm; border-bottom:.3mm solid var(--line); min-height:7mm; }
-  .gap { height:5mm; border-bottom:.3mm solid var(--line); }
+  .dest { font-size:5mm; padding:0 2mm 1.2mm; border-bottom:.3mm solid var(--line); min-height:7mm; }
+  .gap { height:9mm; border-bottom:.3mm solid var(--line); }
 
-  .party { padding:1.5mm 2mm; display:flex; gap:2mm; }
+  .party { padding:3mm 2mm; display:flex; gap:2mm; }
   .party + .party { border-top:.3mm solid var(--line); }
   .pin { flex:none; width:6.5mm; height:6.5mm; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:#111; display:flex; align-items:center; justify-content:center; margin-top:.8mm; }
   .pin i { transform:rotate(45deg); color:#fff; font-style:normal; font-size:3.2mm; font-weight:700; }
   .pin.outline { background:#fff; border:.35mm solid #111; width:5mm; height:5mm; }
   .pin.outline i { color:#111; font-size:2.4mm; }
-  .who { font-size:3.4mm; display:flex; gap:7mm; margin-left:5mm; }
-  .addr { font-size:3.8mm; line-height:1.25; margin-top:.8mm; }
-  .party.send .who { font-size:2.9mm; }
-  .party.send .addr { font-size:3.2mm; }
+  .who { font-size:4mm; display:flex; gap:7mm; margin-left:5mm; }
+  .addr { font-size:4.4mm; line-height:1.3; margin-top:1mm; }
+  .party.send .who { font-size:3.6mm; }
+  .party.send .addr { font-size:4.2mm; }
 
   /* ===== 下半部分：平台贴签 ===== */
-  .sticker { position:relative; width:100mm; height:46mm; background:var(--paper); padding:4mm 6mm; border-top:.3mm dashed #999; }
+  .sticker { position:relative; width:100mm; height:59.18mm; background:var(--paper); padding:4mm 6mm; border-top:.3mm dashed #999; }
   .sticker .checked { position:absolute; right:6mm; bottom:14mm; font-size:3mm; }
   .sticker .foot { position:absolute; left:4mm; bottom:3.5mm; display:flex; align-items:center; gap:2mm; }
   .sticker .mark { width:10mm; height:10mm; background:#111; color:#fff; border-radius:2.2mm; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:3.8mm; }
   .brand .zto { font-family: Arial Black, Arial, sans-serif; font-weight:900; font-style:italic; font-size:8mm; letter-spacing:-.6mm; line-height:1; transform:skewX(-6deg); }
   .sticker .mark.xhs { font-size:2.9mm; letter-spacing:-.2mm; }
   .wm { position:absolute; inset:0; pointer-events:none; z-index:5; background-repeat:repeat; opacity:.13; }
-  .sheet { position:relative; }
-  .sticker .demo { position:absolute; right:3mm; bottom:2mm; font-size:1.3mm; color:#e0e0e0; }
+  .sheet { position:relative; zoom:0.73; }
+  .sticker .demo { position:absolute; right:3mm; bottom:2mm; font-size:1.8mm; color:#e0e0e0; }
   .sticker .slogan { font-size:3.3mm; line-height:1.3; }
   
   @media print {
     body { background:#fff; }
     .panel { display:none; }
     .sheet { margin:0; box-shadow:none; border-radius:0; }
-    @page { size: 100mm 171mm; margin:0; }
+    @page { size: 73mm 160mm; margin:0; }
   }
 </style>
 </head>
@@ -87,7 +87,7 @@
   <label for="no">运单号：</label>
   <input id="no" value="731234567890">
   <button onclick="render()">更新条码</button>
-  <small>面单上的文字都可以直接点击修改；改完单号点"更新条码"，所有条码和边缘竖排单号会同步。打印时控制栏自动隐藏，整张面单一页打印（100×171mm）。</small>
+  <small>面单上的文字都可以直接点击修改；改完单号点"更新条码"，所有条码和边缘竖排单号会同步。打印时控制栏自动隐藏，整张面单一页打印（73×160mm）。</small>
 </div>
 
 <div class="sheet">
