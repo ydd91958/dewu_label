@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>得物快递单模板</title>
+<title>中通面单演示样例</title>
 <style>
   :root { --ink:#111; --line:#222; --paper:#fff; --bg:#e9e6e1; }
   * { box-sizing: border-box; }
@@ -66,6 +66,11 @@
   .sticker .checked { position:absolute; right:6mm; bottom:14mm; font-size:3mm; }
   .sticker .foot { position:absolute; left:4mm; bottom:3.5mm; display:flex; align-items:center; gap:2mm; }
   .sticker .mark { width:10mm; height:10mm; background:#111; color:#fff; border-radius:2.2mm; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:3.8mm; }
+  .brand .zto { font-family: Arial Black, Arial, sans-serif; font-weight:900; font-style:italic; font-size:8mm; letter-spacing:-.6mm; line-height:1; transform:skewX(-6deg); }
+  .sticker .mark.xhs { font-size:2.9mm; letter-spacing:-.2mm; }
+  .wm { position:absolute; inset:0; pointer-events:none; z-index:5; background-repeat:repeat; opacity:.13; }
+  .sheet { position:relative; }
+  .sticker .demo { position:absolute; right:3mm; bottom:2mm; font-size:1.3mm; color:#e0e0e0; }
   .sticker .slogan { font-size:3.3mm; line-height:1.3; }
   
   @media print {
@@ -80,7 +85,7 @@
 
 <div class="panel">
   <label for="no">运单号：</label>
-  <input id="no" value="DW7373089230790">
+  <input id="no" value="731234567890">
   <button onclick="render()">更新条码</button>
   <small>面单上的文字都可以直接点击修改；改完单号点"更新条码"，所有条码和边缘竖排单号会同步。打印时控制栏自动隐藏，整张面单一页打印（100×171mm）。</small>
 </div>
@@ -93,8 +98,8 @@
 
     <div class="head">
       <div class="brand">
-        <div class="mark">得物</div>
-        <div class="txt"><b contenteditable>得物速递</b><span contenteditable>DEWU EXPRESS</span></div>
+        <div class="zto">ZTO</div>
+        <div class="txt"><b contenteditable>中通速递</b><span contenteditable>ZTO EXPRESS</span></div>
       </div>
       <div class="kind" contenteditable>快递<br>包裹</div>
     </div>
@@ -118,7 +123,7 @@
         <div class="party send">
           <div class="pin outline"><i>寄</i></div>
           <div>
-            <div class="who"><span contenteditable>得物鉴别中心</span><span contenteditable>400****0000</span></div>
+            <div class="who"><span contenteditable>李*</span><span contenteditable>150****0000</span></div>
             <div class="addr" contenteditable>江苏省苏州市常熟市常熟经济技术开发区示例路25号</div>
           </div>
         </div>
@@ -133,9 +138,10 @@
   <!-- 下半部分 -->
   <div class="sticker">
     <div class="checked" contenteditable>已验视</div>
+    <div class="demo">演示样例</div>
     <div class="foot">
-      <div class="mark">得物</div>
-      <div class="slogan" contenteditable>先鉴别<br>后发货</div>
+      <div class="mark xhs">小红书</div>
+      <div class="slogan" contenteditable>你的<br>生活指南</div>
     </div>
   </div>
 </div>
@@ -159,7 +165,7 @@ function drawBars(svg, text, vertical){
   svg.innerHTML = `<g fill="#111">${out}</g>`;
 }
 function render(){
-  const no=document.getElementById("no").value.trim()||"DW0000000000000";
+  const no=document.getElementById("no").value.trim()||"730000000000";
   document.querySelectorAll(".bc").forEach(s=>drawBars(s,no,false));
   document.querySelectorAll(".bc-v").forEach(s=>drawBars(s,no,true));
   document.querySelectorAll(".sn,.sn-h").forEach(e=>e.textContent=no);
