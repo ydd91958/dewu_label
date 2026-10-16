@@ -5,79 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>中通面单演示样例</title>
 <style>
-  :root { --ink:#111; --line:#222; --paper:#fff; --bg:#e9e6e1; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); font-family: "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; color:var(--ink); }
-  .panel { max-width: 640px; margin: 16px auto; padding: 12px 16px; background:#fff; border-radius:10px; font-size:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  * { box-sizing:border-box; -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  body { margin:0; background:#e9e6e1; color:#000; font-family:"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+         -webkit-font-smoothing:none; }
+  .panel { max-width:640px; margin:16px auto; padding:12px 16px; background:#fff; border-radius:10px; font-size:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   .panel input { flex:1; min-width:180px; padding:6px 8px; font-size:14px; border:1px solid #bbb; border-radius:6px; }
   .panel button { padding:6px 14px; border:0; border-radius:6px; background:#111; color:#fff; cursor:pointer; }
-  .panel small { width:100%; color:#666; }
-  .sheet { width: 100mm; margin: 0 auto 24px; display:flex; flex-direction:column; background:var(--paper); border-radius:3mm; box-shadow:0 1px 4px rgba(0,0,0,.15); overflow:hidden; }
-  [contenteditable]:focus { outline: 1px dashed #4a8; }
+  .panel small { width:100%; color:#666; line-height:1.6; }
+  [contenteditable]:focus { outline:1px dashed #4a8; }
 
-  /* ===== 上半部分：面单 ===== */
-  .label { position:relative; width:100mm; height:160mm; background:var(--paper); padding:3mm 7mm 3mm 7mm; overflow:hidden; }
-  .side-no { position:absolute; font-family: "Courier New", monospace; font-size:2.6mm; letter-spacing:.2mm; writing-mode: vertical-rl; }
-  .side-no.l1 { left:1.6mm; top:30mm; }
-  .side-no.l2 { left:1.6mm; top:100mm; }
-  .side-no.r1 { right:1.4mm; top:30mm; }
-  .side-no.r2 { right:1.4mm; top:100mm; }
+  /* 73 × 160 mm，原生尺寸，无缩放 */
+  .sheet { position:relative; width:73mm; height:160mm; background:#fff; overflow:hidden; }
+  .num { font-family:Arial,Helvetica,sans-serif; font-weight:700; }
+  .side { position:absolute; writing-mode:vertical-rl; font-size:1.9mm; letter-spacing:.15mm; }
+  .side.l1 { left:.9mm; top:24mm; } .side.l2 { left:.9mm; top:68mm; }
+  .side.r1 { right:.9mm; top:24mm; } .side.r2 { right:.9mm; top:68mm; }
 
-  .head { display:flex; justify-content:space-between; align-items:flex-start; height:17mm; }
-  .brand { display:flex; align-items:center; gap:2mm; margin-top:2mm; }
-  .brand .mark { width:9mm; height:9mm; background:#111; color:#fff; border-radius:2mm; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:3.6mm; letter-spacing:-.2mm; }
-  .brand .txt b { display:block; font-size:4.6mm; line-height:1; font-weight:800; }
-  .brand .txt span { display:block; font-size:2.3mm; letter-spacing:.6mm; font-weight:700; font-style:italic; margin-top:.6mm; }
-  .kind { font-size:6.2mm; line-height:1.05; text-align:right; font-weight:500; }
+  .label { position:absolute; left:0; top:0; width:73mm; height:117mm; padding:2.5mm 5mm 0; }
+  .head { display:flex; justify-content:space-between; align-items:flex-start; height:11.5mm; }
+  .brand { display:flex; align-items:center; gap:1.4mm; margin-top:1.2mm; }
+  .zto { font-family:"Arial Black",Arial,sans-serif; font-weight:900; font-style:italic; font-size:6.2mm; letter-spacing:-.4mm; line-height:1; }
+  .brand b { display:block; font-size:3.4mm; line-height:1; font-weight:900; }
+  .brand span { display:block; font-size:1.75mm; letter-spacing:.45mm; font-weight:700; font-style:italic; margin-top:.5mm; font-family:Arial,sans-serif; }
+  .kind { font-size:4.4mm; line-height:1.05; text-align:right; font-weight:700; }
 
-  .meta { font-size:3mm; display:flex; gap:4mm; padding-bottom:1mm; border-bottom:.3mm solid var(--line); font-family:"Courier New",monospace; }
-  .meta .cnt { font-family:inherit; }
-  .sort { font-size:10mm; font-weight:500; text-align:center; letter-spacing:.5mm; padding:1mm 0 1.5mm; border-bottom:.3mm solid var(--line); white-space:pre; }
+  .meta { font-size:2.3mm; display:flex; gap:3mm; height:4.5mm; align-items:flex-end; padding-bottom:.8mm; border-bottom:.3mm solid #000; }
+  .sort { font-size:7.6mm; font-weight:700; text-align:center; height:10mm; line-height:10mm; border-bottom:.3mm solid #000; white-space:pre; }
 
-  .body { display:flex; height:calc(160mm - 3mm - 17mm - 5mm - 14.5mm - 3mm); }
-  .main { flex:1; border-right:.3mm solid var(--line); display:flex; flex-direction:column; }
-  .vbar { width:16mm; display:flex; align-items:center; justify-content:center; gap:.6mm; }
-  .vbar svg { width:10.5mm; height:92mm; }
-  .vbar .vno { writing-mode:vertical-rl; font-family:"Courier New",monospace; font-size:2.6mm; }
+  .body { display:flex; height:88.5mm; }
+  .main { flex:1; min-width:0; border-right:.3mm solid #000; display:flex; flex-direction:column; }
+  .vbar { width:12mm; display:flex; align-items:center; justify-content:center; gap:.5mm; }
+  .vbar .vno { writing-mode:vertical-rl; font-size:1.9mm; }
 
-  .hbar { padding:1.5mm 2mm 1mm; text-align:center; border-bottom:.3mm solid var(--line); }
-  .hbar svg { width:100%; height:11mm; display:block; }
-  .hbar .no { font-family:"Courier New",monospace; font-size:3.4mm; letter-spacing:.3mm; margin-top:.5mm; }
+  .hbar { padding:1.2mm 1.5mm .8mm; text-align:center; border-bottom:.3mm solid #000; }
+  .hbar .no { font-size:2.6mm; letter-spacing:.25mm; margin-top:.4mm; }
+  svg.bc { display:block; margin:0 auto; shape-rendering:crispEdges; }
 
-  .tags { display:flex; justify-content:flex-start; padding:1.2mm 2mm; }
-  .tag { background:#111; color:#fff; font-size:3.4mm; padding:.6mm 1.4mm; border-radius:.5mm; margin-left:24mm; }
-  .tag:first-child { margin-left:0; }
-  .dest { font-size:5mm; padding:0 2mm 1.2mm; border-bottom:.3mm solid var(--line); min-height:7mm; }
-  .gap { height:9mm; border-bottom:.3mm solid var(--line); }
+  .tags { display:flex; padding:1.2mm 1.5mm .6mm; }
+  .tag { background:#000; color:#fff; font-size:2.6mm; font-weight:700; padding:.4mm 1mm; border-radius:.4mm; }
+  .tag + .tag { margin-left:17mm; }
+  .dest { font-size:3.8mm; font-weight:700; padding:0 1.5mm 1mm; border-bottom:.3mm solid #000; }
+  .gap { height:6mm; border-bottom:.3mm solid #000; }
 
-  .party { padding:3mm 2mm; display:flex; gap:2mm; }
-  .party + .party { border-top:.3mm solid var(--line); }
-  .pin { flex:none; width:6.5mm; height:6.5mm; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:#111; display:flex; align-items:center; justify-content:center; margin-top:.8mm; }
-  .pin i { transform:rotate(45deg); color:#fff; font-style:normal; font-size:3.2mm; font-weight:700; }
-  .pin.outline { background:#fff; border:.35mm solid #111; width:5mm; height:5mm; }
-  .pin.outline i { color:#111; font-size:2.4mm; }
-  .who { font-size:4mm; display:flex; gap:7mm; margin-left:5mm; }
-  .addr { font-size:4.4mm; line-height:1.3; margin-top:1mm; }
-  .party.send .who { font-size:3.6mm; }
-  .party.send .addr { font-size:4.2mm; }
+  .party { padding:2.4mm 1.5mm; display:flex; gap:1.6mm; }
+  .party + .party { border-top:.3mm solid #000; }
+  .pin { flex:none; width:4.8mm; height:4.8mm; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:#000; display:flex; align-items:center; justify-content:center; margin-top:.6mm; }
+  .pin i { transform:rotate(45deg); color:#fff; font-style:normal; font-size:2.5mm; font-weight:700; }
+  .pin.outline { background:#fff; border:.3mm solid #000; width:3.8mm; height:3.8mm; }
+  .pin.outline i { color:#000; font-size:1.9mm; }
+  .who { font-size:3mm; font-weight:700; display:flex; gap:5mm; margin-left:3mm; }
+  .addr { font-size:3.3mm; font-weight:700; line-height:1.3; margin-top:.8mm; }
+  .send .who { font-size:2.7mm; }
+  .send .addr { font-size:3mm; }
 
-  /* ===== 下半部分：平台贴签 ===== */
-  .sticker { position:relative; width:100mm; height:59.18mm; background:var(--paper); padding:4mm 6mm; border-top:.3mm dashed #999; }
-  .sticker .checked { position:absolute; right:6mm; bottom:14mm; font-size:3mm; }
-  .sticker .foot { position:absolute; left:4mm; bottom:3.5mm; display:flex; align-items:center; gap:2mm; }
-  .sticker .mark { width:10mm; height:10mm; background:#111; color:#fff; border-radius:2.2mm; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:3.8mm; }
-  .brand .zto { font-family: Arial Black, Arial, sans-serif; font-weight:900; font-style:italic; font-size:8mm; letter-spacing:-.6mm; line-height:1; transform:skewX(-6deg); }
-  .sticker .mark.xhs { font-size:2.9mm; letter-spacing:-.2mm; }
-  .wm { position:absolute; inset:0; pointer-events:none; z-index:5; background-repeat:repeat; opacity:.13; }
-  .sheet { position:relative; zoom:0.73; }
-  .sticker .demo { position:absolute; right:3mm; bottom:2mm; font-size:1.8mm; color:#e0e0e0; }
-  .sticker .slogan { font-size:3.3mm; line-height:1.3; }
-  
+  .sticker { position:absolute; left:0; top:117mm; width:73mm; height:43mm; border-top:.3mm dashed #000; }
+  .sticker .checked { position:absolute; right:4.5mm; bottom:10.5mm; font-size:2.4mm; font-weight:700; }
+  .sticker .foot { position:absolute; left:3mm; bottom:2.6mm; display:flex; align-items:center; gap:1.5mm; }
+  .sticker .mark { width:7.3mm; height:7.3mm; background:#000; color:#fff; border-radius:1.6mm; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:2.2mm; }
+  .sticker .slogan { font-size:2.5mm; font-weight:700; line-height:1.3; }
+  .sticker .demo { position:absolute; right:2.2mm; bottom:1.5mm; font-size:1.3mm; color:#e0e0e0; }
+
+  /* 页面容器：A4 模式 210×297mm，面单 1:1 居中 */
+  .page { position:relative; margin:0 auto 24px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.15); }
+  .page .sheet { margin:0; box-shadow:none; position:absolute; }
+  .page.a4 { width:210mm; height:297mm; }
+  .page.a4 .sheet { left:68.5mm; top:50mm; outline:.1mm dotted #000; }
+  .page.label { width:73mm; height:160mm; }
+  .page.label .sheet { left:0; top:0; }
+  .page.label .crop, .page.label .ruler, .page.label .cap { display:none; }
+  .crop { position:absolute; width:8mm; height:8mm; }
+  .crop.tl { left:60.5mm; top:42mm; border-right:.2mm solid #000; border-bottom:.2mm solid #000; }
+  .crop.tr { left:141.5mm; top:42mm; border-left:.2mm solid #000; border-bottom:.2mm solid #000; }
+  .crop.bl { left:60.5mm; top:210mm; border-right:.2mm solid #000; border-top:.2mm solid #000; }
+  .crop.br { left:141.5mm; top:210mm; border-left:.2mm solid #000; border-top:.2mm solid #000; }
+  .ruler { position:absolute; left:68.5mm; top:228mm; font-size:2.6mm; }
+  .ruler .bar { width:50mm; height:2mm; border:.25mm solid #000; border-top:0; margin-bottom:1.2mm;
+    background:repeating-linear-gradient(90deg,#000 0 .25mm,transparent .25mm 10mm); }
+  .cap { position:absolute; left:68.5mm; top:36mm; font-size:2.6mm; }
   @media print {
-    body { background:#fff; }
+    html, body { background:#fff; margin:0; }
     .panel { display:none; }
-    .sheet { margin:0; box-shadow:none; border-radius:0; }
-    @page { size: 73mm 160mm; margin:0; }
+    .page { margin:0; box-shadow:none; }
   }
 </style>
 </head>
@@ -87,90 +95,108 @@
   <label for="no">运单号：</label>
   <input id="no" value="731234567890">
   <button onclick="render()">更新条码</button>
-  <small>面单上的文字都可以直接点击修改；改完单号点"更新条码"，所有条码和边缘竖排单号会同步。打印时控制栏自动隐藏，整张面单一页打印（73×160mm）。</small>
+  <label>纸张：<select id="paper" onchange="setPaper()"><option value="a4">A4（按实际尺寸居中，带裁切线）</option><option value="label">73×160mm 面单纸</option></select></label>
+  <small>面单文字可直接点击修改；改完单号点"更新条码"。<br>
+  打印设置：缩放选 <b>100% / 实际大小</b>（不要"适合页面"），边距选 <b>无</b>，纸张与上面选的一致。A4 模式下打印后可用尺子量页面上的 50mm 校准线，确认比例无误再沿裁切线剪下。</small>
 </div>
 
+<div class="page" id="page">
+<div class="crop tl"></div><div class="crop tr"></div><div class="crop bl"></div><div class="crop br"></div>
+<div class="ruler"><div class="bar"></div><span>校准线 50mm（打印后应正好 5cm）</span></div>
+<div class="cap">面单实际尺寸 73 × 160 mm · 沿四角裁切线剪下</div>
 <div class="sheet">
-  <!-- 上半部分 -->
   <div class="label">
-    <div class="side-no l1 sn"></div><div class="side-no l2 sn"></div>
-    <div class="side-no r1 sn"></div><div class="side-no r2 sn"></div>
+    <div class="side l1 num sn"></div><div class="side l2 num sn"></div>
+    <div class="side r1 num sn"></div><div class="side r2 num sn"></div>
 
     <div class="head">
       <div class="brand">
         <div class="zto">ZTO</div>
-        <div class="txt"><b contenteditable>中通速递</b><span contenteditable>ZTO EXPRESS</span></div>
+        <div><b contenteditable>中通速递</b><span contenteditable>ZTO EXPRESS</span></div>
       </div>
       <div class="kind" contenteditable>快递<br>包裹</div>
     </div>
 
-    <div class="meta"><span contenteditable>2026/10/14</span><span contenteditable>13:08:00</span><span class="cnt" contenteditable>第1/1个</span></div>
-    <div class="sort" contenteditable>300-  A6  48</div>
+    <div class="meta num"><span contenteditable>2026/10/16</span><span contenteditable>10:30:00</span><span contenteditable style="font-family:inherit">第1/1个</span></div>
+    <div class="sort num" contenteditable>300-  A6  48</div>
 
     <div class="body">
       <div class="main">
-        <div class="hbar"><svg class="bc" preserveAspectRatio="none"></svg><div class="no sn-h"></div></div>
+        <div class="hbar"><svg class="bc" id="bcH"></svg><div class="no num sn"></div></div>
         <div class="tags"><span class="tag" contenteditable>末</span><span class="tag" contenteditable>组</span></div>
         <div class="dest" contenteditable>沪西</div>
         <div class="gap"></div>
         <div class="party">
           <div class="pin"><i>收</i></div>
           <div>
-            <div class="who"><span contenteditable>张*</span><span contenteditable>138****0000</span></div>
+            <div class="who"><span contenteditable>张*</span><span class="num" contenteditable>138****0000</span></div>
             <div class="addr" contenteditable>上海上海市嘉定区马陆镇示例路100号</div>
           </div>
         </div>
         <div class="party send">
           <div class="pin outline"><i>寄</i></div>
           <div>
-            <div class="who"><span contenteditable>李*</span><span contenteditable>150****0000</span></div>
+            <div class="who"><span contenteditable>李*</span><span class="num" contenteditable>150****0000</span></div>
             <div class="addr" contenteditable>江苏省苏州市常熟市常熟经济技术开发区示例路25号</div>
           </div>
         </div>
       </div>
       <div class="vbar">
-        <div class="vno sn"></div>
-        <svg class="bc-v" preserveAspectRatio="none"></svg>
+        <div class="vno num sn"></div>
+        <svg class="bc" id="bcV"></svg>
       </div>
     </div>
   </div>
 
-  <!-- 下半部分 -->
   <div class="sticker">
     <div class="checked" contenteditable>已验视</div>
-    <div class="demo">演示样例</div>
     <div class="foot">
-      <div class="mark xhs">小红书</div>
+      <div class="mark">小红书</div>
       <div class="slogan" contenteditable>你的<br>生活指南</div>
     </div>
+    <div class="demo">演示样例</div>
   </div>
+</div>
 </div>
 
 <script>
-// Code 128B barcode generator
-const P = ["212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"];
-function code128(text){
-  const codes=[104]; for(const ch of text){ const c=ch.charCodeAt(0)-32; codes.push(c>=0&&c<95?c:0); }
-  let sum=104; for(let i=1;i<codes.length;i++) sum+=codes[i]*i;
-  codes.push(sum%103); codes.push(106);
+const P=["212222","222122","222221","121223","121322","131222","122213","122312","132212","221213","221312","231212","112232","122132","122231","113222","123122","123221","223211","221132","221231","213212","223112","312131","311222","321122","321221","312212","322112","322211","212123","212321","232121","111323","131123","131321","112313","132113","132311","211313","231113","231311","112133","112331","132131","113123","113321","133121","313121","211331","231131","213113","213311","213131","311123","311321","331121","312113","312311","332111","314111","221411","431111","111224","111422","121124","121421","141122","141221","112214","112412","122114","122411","142112","142211","241211","221114","413111","241112","134111","111242","121142","121241","114212","124112","124211","411212","421112","421211","212141","214121","412121","111143","111341","131141","114113","114311","411113","411311","113141","114131","311141","411131","211412","211214","211232","2331112"];
+// 纯数字且偶数位用 Code128C（更短、线更粗），否则用 128B
+function code128(t){
+  let codes;
+  if(/^\d+$/.test(t) && t.length%2===0){ codes=[105]; for(let i=0;i<t.length;i+=2) codes.push(+t.substr(i,2)); }
+  else { codes=[104]; for(const ch of t){ const c=ch.charCodeAt(0)-32; codes.push(c>=0&&c<95?c:0); } }
+  let sum=codes[0]; for(let i=1;i<codes.length;i++) sum+=codes[i]*i;
+  codes.push(sum%103, 106);
   return codes.map(c=>P[c]).join("");
 }
-function drawBars(svg, text, vertical){
-  const pat=code128(text); let total=0; for(const d of pat) total+=+d;
+// 线宽取 0.125mm（203dpi 热敏打印机一个点）的整数倍，保证打印锐利
+function draw(svg, text, vertical, maxLen, thick){
+  const pat=code128(text); let n=0; for(const d of pat) n+=+d;
+  let m=Math.floor(maxLen/n/0.125)*0.125; if(m<0.25) m=0.25;
   let x=0, out="";
-  for(let i=0;i<pat.length;i++){ const w=+pat[i];
-    if(i%2===0) out+= vertical ? `<rect x="0" y="${x}" width="10" height="${w}"/>` : `<rect x="${x}" y="0" width="${w}" height="10"/>`;
-    x+=w; }
-  svg.setAttribute("viewBox", vertical ? `0 0 10 ${total}` : `0 0 ${total} 10`);
-  svg.innerHTML = `<g fill="#111">${out}</g>`;
+  for(let i=0;i<pat.length;i++){ const w=+pat[i]; if(i%2===0) out+= vertical?`<rect x="0" y="${x}" width="1" height="${w}"/>`:`<rect x="${x}" y="0" width="${w}" height="1"/>`; x+=w; }
+  svg.setAttribute("viewBox", vertical?`0 0 1 ${n}`:`0 0 ${n} 1`);
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.style.width = vertical? thick+"mm" : (n*m)+"mm";
+  svg.style.height= vertical? (n*m)+"mm" : thick+"mm";
+  svg.innerHTML=`<g fill="#000">${out}</g>`;
 }
 function render(){
-  const no=document.getElementById("no").value.trim()||"730000000000";
-  document.querySelectorAll(".bc").forEach(s=>drawBars(s,no,false));
-  document.querySelectorAll(".bc-v").forEach(s=>drawBars(s,no,true));
-  document.querySelectorAll(".sn,.sn-h").forEach(e=>e.textContent=no);
+  const no=document.getElementById("no").value.trim()||"000000000000";
+  draw(document.getElementById("bcH"), no, false, 44, 9);
+  draw(document.getElementById("bcV"), no, true, 76, 8);
+  document.querySelectorAll(".sn").forEach(e=>e.textContent=no);
 }
 render();
+function setPaper(){
+  const v=document.getElementById('paper').value, pg=document.getElementById('page');
+  pg.className='page '+v;
+  let st=document.getElementById('pagesize');
+  if(!st){ st=document.createElement('style'); st.id='pagesize'; document.head.appendChild(st); }
+  st.textContent = v==='a4' ? '@page{size:210mm 297mm;margin:0}' : '@page{size:73mm 160mm;margin:0}';
+}
+setPaper();
 </script>
 </body>
 </html>
